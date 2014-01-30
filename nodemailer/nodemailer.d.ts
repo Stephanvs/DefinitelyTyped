@@ -1,10 +1,11 @@
 // Type definitions for Nodemailer
-// Nodemailer is an easy to use module to send e-mails with Node.JS (using SMTP or sendmail or Amazon SES) and is unicode friendly .
 // Project: https://github.com/andris9/Nodemailer
 // Definitions by: Vincent Bortone <https://github.com/vbortone/>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-class Transport {
+// Nodemailer is an easy to use module to send e-mails with Node.JS (using SMTP or sendmail or Amazon SES) and is unicode friendly .
+
+declare class Transport {
 	static transports: {
 		SMTP: Transport;
 		SES: Transport;
@@ -38,7 +39,7 @@ interface MailComposer {
 	text?: string;  // plaintext body
 	html?: string;  // HTML body
 	attachments?: NodeMailerAttachment[];  // An array of attachments
-	forceEmbeddedImages?: bool;
+	forceEmbeddedImages?: boolean;
 }
 
 interface DKIMOptions{
@@ -47,7 +48,7 @@ interface DKIMOptions{
 	privateKey: any;
 }
 
-class XOAuthGenerator {
+declare class XOAuthGenerator {
 	constructor(options: XOAuthGeneratorOptions);
 	generate(callback: () => any): string;
 }
@@ -69,21 +70,37 @@ interface XOAuth2Options {
 
 interface NodemailerTransportOptions {
 	service?: string;
-	auth?: {
-		user?: string;
-		pass?: string;
-		XOAuthToken?: XOAuthGenerator;
-		XOAuth2?: XOAuth2Options;
-	};
-	debug?: bool;
+	auth?: NodemailerAuthInterface;
+	debug?: boolean;
 	AWSAccessKeyID?: string;
 	AWSSecretKey: string;
 	ServiceUrl: string;
 }
 
+interface NodemailerAuthInterface {
+	user?: string;
+	pass?: string;
+	XOAuthToken?: XOAuthGenerator;
+	XOAuth2?: XOAuth2Options;
+}
+
+interface NodemailerSMTPTransportOptions {
+	service?:          string;
+	host?:             string;
+	port?:             number;
+	secureConnection?: boolean;
+	name?:             string;
+	auth:              NodemailerAuthInterface;
+	ignoreTLS?:        boolean;
+	debug?:            boolean;
+	maxConnections?:   number;
+}
+
+
 interface Nodemailer {
 	createTransport(type: string): Transport;
 	createTransport(type: string, options: NodemailerTransportOptions): Transport;
+	createTransport(type: string, options: NodemailerSMTPTransportOptions): Transport;
 	createTransport(type: string, path: string): Transport;
 	createXOAuthGenerator(options: XOAuthGeneratorOptions): XOAuthGenerator;
 }

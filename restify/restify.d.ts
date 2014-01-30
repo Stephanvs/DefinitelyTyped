@@ -11,8 +11,8 @@ interface addressInterface {
 
 interface Request {
     header: (key: string, defaultValue?: string) => any;
-    accepts: (type: string) => bool;
-    is: (type: string) => bool;
+    accepts: (type: string) => boolean;
+    is: (type: string) => boolean;
     getLogger: (component: string) => any;
     contentLength: number;
     contentType: string;
@@ -21,7 +21,7 @@ interface Request {
     id: string;
     path: () => string;
     query: string;
-    secure: bool;
+    secure: boolean;
     time: number;
     params: any;
 }
@@ -43,11 +43,12 @@ interface Response {
 
 interface Server {
     use: (... handler: any[]) => any;
-    post: (route: any, routeCallBack: (req: Request, res: Response, next: Function) => any) => any;
-    put: (route: any, routeCallBack: (req: Request, res: Response, next: Function) => any) => any;
-    del: (route: any, routeCallBack: (req: Request, res: Response, next: Function) => any) => any;
-    get: (route: any, routeCallBack: (req: Request, res: Response, next: Function ) => any) => any;
-    head: (route: any, routeCallBack: (req: Request, res: Response, next: Function) => any) => any;
+    post: (route: any, routeCallBack: RequestHadler) => any;
+    patch: (route: any, routeCallBack: RequestHadler) => any;
+    put: (route: any, routeCallBack: RequestHadler) => any;
+    del: (route: any, routeCallBack: RequestHadler) => any;
+    get: (route: any, routeCallBack: RequestHadler) => any;
+    head: (route: any, routeCallBack: RequestHadler) => any;
     on: (event: string, callback: Function) => any;
     name: string;
     version: string;
@@ -57,7 +58,7 @@ interface Server {
     address: () => addressInterface;
     listen: (... args: any[]) => any;
     close: (... args: any[]) => any;
-    pre: (routeCallBack: (req: Request, res: Response, next: Function) => any) => any;
+    pre: (routeCallBack: RequestHadler) => any;
 
 }
 
@@ -107,12 +108,16 @@ interface HttpClient extends Client {
 interface ThrottleOptions {
     burst?: number;
     rate?: number;
-    ip?: bool;
-    xff?: bool;
-    username?: bool;
+    ip?: boolean;
+    xff?: boolean;
+    username?: boolean;
     tokensTable?: Object;
     maxKeys?: number;
     overrides?: Object;
+}
+
+interface RequestHadler {
+    (req: Request, res: Response, next: Function): any;
 }
 
 declare module "restify" {
@@ -121,37 +126,38 @@ declare module "restify" {
     export function createJsonClient(options?: ClientOptions): Client;
     export function createStringClient(options?: ClientOptions): Client;
     export function createClient(options?: ClientOptions): HttpClient;
-    
-    export class ConflictError { constructor(message?: any); };
-    export class InvalidArguementError { constructor(message?: any); };
-    export class RestError { constructor(message?: any); };
-    export class BadDigestError { constructor(message: any); };
-    export class BadMethodError { constructor(message: any); };
-    export class BadRequestError { constructor(message: any); };
-    export class InternalError { constructor(message: any); };
-    export class InvalidContentError { constructor(message: any); };
-    export class InvalidCredentialsError { constructor(message: any); };
-    export class InvalidHeaderError { constructor(message: any); };
-    export class InvalidVersionError { constructor(message: any); };
-    export class MissingParameterError { constructor(message: any); };
-    export class NotAuthorizedError { constructor(message: any); };
-    export class RequestExpiredError { constructor(message: any); };
-    export class RequestThrottledError { constructor(message: any); };
-    export class ResourceNotFoundError { constructor(message: any); };
-    export class WrongAcceptError { constructor(message: any); };
 
-    export function acceptParser(parser: any);
-    export function authorizationParser();
-    export function dateParser(skew?: number);
-    export function queryParser(options?: Object);
-    export function urlEncodedBodyParser(options?: Object);
-    export function jsonp(options?: Object);
-    export function gzipResponse(options?: Object);
-    export function bodyParser(options?: Object);
-    export function requestLogger(options?: Object);
-    export function serveStatic(options?: Object);
-    export function throttle(options?: ThrottleOptions);
-    export function conditionalRequest(options?: Object);
-    export function auditLogger(options?: Object);
+    export class ConflictError { constructor(message?: any); }
+    export class InvalidArguementError { constructor(message?: any); }
+    export class RestError { constructor(message?: any); }
+    export class BadDigestError { constructor(message: any); }
+    export class BadMethodError { constructor(message: any); }
+    export class BadRequestError { constructor(message: any); }
+    export class InternalError { constructor(message: any); }
+    export class InvalidContentError { constructor(message: any); }
+    export class InvalidCredentialsError { constructor(message: any); }
+    export class InvalidHeaderError { constructor(message: any); }
+    export class InvalidVersionError { constructor(message: any); }
+    export class MissingParameterError { constructor(message: any); }
+    export class NotAuthorizedError { constructor(message: any); }
+    export class RequestExpiredError { constructor(message: any); }
+    export class RequestThrottledError { constructor(message: any); }
+    export class ResourceNotFoundError { constructor(message: any); }
+    export class WrongAcceptError { constructor(message: any); }
+
+    export function acceptParser(parser: any): RequestHadler;
+    export function authorizationParser(): RequestHadler;
+    export function dateParser(skew?: number): RequestHadler;
+    export function queryParser(options?: Object): RequestHadler;
+    export function urlEncodedBodyParser(options?: Object): RequestHadler[];
+    export function jsonp(): RequestHadler;
+    export function gzipResponse(options?: Object): RequestHadler;
+    export function bodyParser(options?: Object): RequestHadler[];
+    export function requestLogger(options?: Object): RequestHadler;
+    export function serveStatic(options?: Object): RequestHadler;
+    export function throttle(options?: ThrottleOptions): RequestHadler;
+    export function conditionalRequest(): RequestHadler[];
+    export function auditLogger(options?: Object): Function;
+    export function fullResponse(): RequestHadler;
     export var defaultResponseHeaders : any;
 }

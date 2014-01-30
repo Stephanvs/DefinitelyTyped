@@ -149,7 +149,7 @@ test( 'jQuery.param.sorted', function() {
   
   expect( tests.length * 2 + 6 );
   
-  $.each( tests, function(i,test){
+  $.each( tests, function(i,test: any){
     var unsorted = $.param( test.obj, test.traditional ),
       sorted = $.param.sorted( test.obj, test.traditional );
     
@@ -587,7 +587,7 @@ QUnit.module( 'jQuery.fn' );
 $.elemUrlAttr({ span: 'arbitrary_attr' });
 var test_elems = 'a form link span'.split(' ');
 
-function init_url_attr( container, url ) {
+function init_url_attr( _, url ) {
   var container = $('<div/>').hide().appendTo('body');
   $.each( test_elems, function(i,v){
     $('<' + v + '/>')

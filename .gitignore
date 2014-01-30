@@ -1,5 +1,6 @@
 *.dll
 *.exe
+*.cmd
 *.pdb
 *.suo
 *.js
@@ -22,8 +23,14 @@ Properties
 *~
 
 # test folder
+!_infrastructure/*.js
 !_infrastructure/tests/*
 !_infrastructure/tests/*.js
 !_infrastructure/tests/*/*.js
 !_infrastructure/tests/*/*/*.js
 !_infrastructure/tests/*/*/*/*.js
+
+.idea
+*.iml
+
+node_modules

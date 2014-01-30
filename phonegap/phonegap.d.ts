@@ -3,10 +3,6 @@
 // Definitions by: Boris Yankov <https://github.com/borisyankov/>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-interface EventTarget {
-    result: any;
-}
-
 interface GeolocationError {
     code: number;
     message: string;
@@ -47,14 +43,14 @@ interface CameraOptions {
     quality?: number;
     destinationType?: number;
     sourceType?: number;
-    allowEdit?: bool;
+    allowEdit?: boolean;
     encodingType?: number;
     targetWidth?: number;
     targetHeight?: number;
     mediaType?: number;
-    correctOrientation?: bool;
-    saveToPhotoAlbum?: bool;
-    popoverOptions?: number;
+    correctOrientation?: boolean;
+    saveToPhotoAlbum?: boolean;
+    popoverOptions?: CameraPopoverOptions;
 }
 
 interface CameraPictureSourceTypeObject {
@@ -157,6 +153,11 @@ interface CompassError {
     code: number;
 }
 
+declare var CompassError: {
+    COMPASS_INTERNAL_ERR: number;
+    COMPASS_NOT_SUPPORTED: number;
+}
+
 interface Compass {
     getCurrentHeading(compassSuccess: (heading: CompassHeading) => void , compassError: (error: CompassError) => void , compassOptions?: CompassOptions): void;
     watchHeading(compassSuccess: (heading: CompassHeading) => void , compassError: (error: CompassError) => void , compassOptions?: CompassOptions): void;
@@ -168,7 +169,7 @@ interface Connection {
 }
 
 interface ContactAddress {
-    pref: bool;
+    pref: boolean;
     type: string;
     formatted: string;
     streetAddress: string;
@@ -181,10 +182,10 @@ interface ContactAddress {
 interface ContactField {
     type: string;
     value: string;
-    pref: bool;
+    pref: boolean;
 }
 declare var ContactField: {
-    new(type: string, calue: string, perf: bool): ContactField;
+    new(type: string, calue: string, perf: boolean): ContactField;
 }
 
 interface Contact {
@@ -210,7 +211,7 @@ interface Contact {
 
 interface ContactFindOptions {
     filter?: string;
-    multiple?: bool;
+    multiple?: boolean;
 }
 declare var ContactFindOptions : {
     new(): ContactFindOptions;
@@ -229,7 +230,7 @@ declare var ContactName: {
 }
 
 interface ContactOrganization {
-    pref: bool;
+    pref: boolean;
     type: string;
     name: string;
     department: string;
@@ -240,12 +241,23 @@ interface ContactError {
     code: number;
 }
 
+declare var ContactError: {
+    UNKNOWN_ERROR: number;
+    INVALID_ARGUMENT_ERROR: number;
+    TIMEOUT_ERROR: number;
+    PENDING_OPERATION_ERROR: number;
+    IO_ERROR: number;
+    NOT_SUPPORTED_ERROR: number;
+    PERMISSION_DENIED_ERROR: number;
+}
+
 interface Contacts {
     create(properties?: any): Contact;
     find(contactFields: string[], contactSuccess: (contacts: Contact[]) => void , contactError: (error: ContactError) => void , contactFindOptions?: ContactFindOptions): void;
 }
 
 interface Device {
+    available: boolean;
     name: string;
     cordova: string;
     platform: string;
@@ -292,8 +304,8 @@ declare var DirectoryEntry: {
 }
 
 interface FileSystemEntry {
-    isFile: bool;
-    isDirectory: bool;
+    isFile: boolean;
+    isDirectory: boolean;
     name: string;
     fullPath: string;
     filesystem: FileSystem;
@@ -340,7 +352,7 @@ interface FileUploadOptions {
     fileName?: string;
     mimeType?: string;
     params?: any;
-    chunkedMode?: bool;
+    chunkedMode?: boolean;
     headers?: any;
 }
 declare var FileUploadOptions: {
@@ -363,6 +375,7 @@ interface LocalFileSystem {
 
 interface LocalFileSystem {
     PERSISTENT: number;
+    TEMPORARY: number;
 }
 declare var LocalFileSystem: LocalFileSystem;
 
@@ -373,6 +386,20 @@ interface Metadata {
 interface FileError {
     code: number;
 }
+declare var FileError: {
+    NOT_FOUND_ERR: number;
+    SECURITY_ERR: number;
+    ABORT_ERR: number;
+    NOT_READABLE_ERR: number;
+    ENCODING_ERR: number;
+    NO_MODIFICATION_ALLOWED_ERR: number;
+    INVALID_STATE_ERR: number;
+    SYNTAX_ERR: number;
+    INVALID_MODIFICATION_ERR: number;
+    QUOTA_EXCEEDED_ERR: number;
+    TYPE_MISMATCH_ERR: number;
+    PATH_EXISTS_ERR: number;
+}
 
 interface FileTransferError {
     code: number;
@@ -380,9 +407,15 @@ interface FileTransferError {
     target: string;
     http_status: number;
 }
+declare var FileTransferError: {
+    FILE_NOT_FOUND_ERR: number;
+    INVALID_URL_ERR: number;
+    CONNECTION_ERR: number;
+    ABORT_ERR: number;
+}
 
 interface GeolocationOptions {
-    enableHighAccuracy?: bool;
+    enableHighAccuracy?: boolean;
     timeout?: number;
     maximumAge?: number;
 }
@@ -390,6 +423,13 @@ interface GeolocationOptions {
 interface GlobalizationError {
     code: number;
     message: string;
+}
+
+declare var GlobalizationError: {
+    UNKNOWN_ERROR: number;
+    FORMATTING_ERROR: number;
+    PARSING_ERROR: number;
+    PATTERN_ERROR: number;
 }
 
 interface Globalization {
@@ -411,7 +451,7 @@ interface Globalization {
 interface InAppBrowser {
     addEventListener(eventname: string, callback): void;
     removeEventListener(eventname: string, callback): void;
-    open(url?: string, target?: string, features?: string, replace?: bool): Window;
+    open(url?: string, target?: string, features?: string, replace?: boolean): Window;
     close(): void;
 }
 */
@@ -435,6 +475,7 @@ declare var Media: {
 interface Notification {
     alert(message: string, alertCallback: Function, title?: string, buttonName?: string): void;
     confirm(message: string, confirmCallback: Function, title?: string, buttonLabels?: string): void;
+	confirm(message: string, confirmCallback: Function, title?: string, buttonLabels?: string[]): void;
     beep(times: number): void;
     vibrate(milliseconds: number): void;
 }
